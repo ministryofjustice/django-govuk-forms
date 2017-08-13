@@ -1,2 +1,4 @@
 include LICENSE.txt
 include README.rst
+recursive-include govuk_forms *.po
+recursive-include govuk_forms *.mo
