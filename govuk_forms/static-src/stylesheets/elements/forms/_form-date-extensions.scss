@@ -1,0 +1,23 @@
+.form-date {
+  .form-group-date {
+    width: 120px;
+  }
+  .form-group-time {
+    width: 100px;
+  }
+
+  .form-group-year-select {
+    width: 100px;
+  }
+  .form-group-month-select {
+    width: 150px;
+  }
+  .form-group-day-select {
+    width: 100px;
+  }
+  .form-group-year-select, .form-group-month-select, .form-group-day-select {
+    .form-control {
+        width: 100%;
+    }
+  }
+}

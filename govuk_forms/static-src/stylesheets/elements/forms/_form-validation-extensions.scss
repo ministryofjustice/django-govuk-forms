@@ -1,0 +1,6 @@
+.error-summary .error-summary-list {
+  a:not([href]), a[href=''] {
+    text-decoration: none;
+    cursor: inherit;
+  }
+}

@@ -21,14 +21,14 @@ class YearField(forms.IntegerField):
             # 2-digit dates are a minimum of 10 years ago by default
             era_boundary = self.current_year - self.century - 10
         self.era_boundary = era_boundary
-        bounds_error = _('Year should be between 1900 and %(current_year)s') % {'current_year': self.current_year}
+        bounds_error = _('Year should be between 1900 and %(current_year)s.') % {'current_year': self.current_year}
         options = {
             'min_value': 1900,
             'max_value': self.current_year,
             'error_messages': {
                 'min_value': bounds_error,
                 'max_value': bounds_error,
-                'invalid': _('Enter year as a number'),
+                'invalid': _('Enter year as a number.'),
             }
         }
         options.update(kwargs)
@@ -48,27 +48,28 @@ class SplitDateField(forms.MultiValueField):
     widget = SplitDateWidget
     hidden_widget = SplitHiddenDateWidget
     default_error_messages = {
-        'invalid': _('Enter a valid date')
+        'invalid': _('Enter a valid date.')
     }
 
     def __init__(self, *args, **kwargs):
-        day_bounds_error = _('Day should be between 1 and 31')
-        month_bounds_error = _('Month should be between 1 and 12')
+        day_bounds_error = _('Day should be between 1 and 31.')
+        month_bounds_error = _('Month should be between 1 and 12.')
 
-        fields = [
+        self.fields = [
             forms.IntegerField(min_value=1, max_value=31, error_messages={
                 'min_value': day_bounds_error,
                 'max_value': day_bounds_error,
-                'invalid': _('Enter day as a number')
+                'invalid': _('Enter day as a number.')
             }),
             forms.IntegerField(min_value=1, max_value=12, error_messages={
                 'min_value': month_bounds_error,
                 'max_value': month_bounds_error,
-                'invalid': _('Enter month as a number')
+                'invalid': _('Enter month as a number.')
             }),
             YearField(),
         ]
-        super().__init__(fields, *args, **kwargs)
+
+        super().__init__(self.fields, *args, **kwargs)
 
     def compress(self, data_list):
         if data_list:
@@ -79,3 +80,14 @@ class SplitDateField(forms.MultiValueField):
             except ValueError:
                 raise ValidationError(self.error_messages['invalid'], code='invalid')
         return None
+
+    def widget_attrs(self, widget):
+        attrs = super().widget_attrs(widget)
+        if not isinstance(widget, SplitDateWidget):
+            return attrs
+        for subfield, subwidget in zip(self.fields, widget.widgets):
+            if subfield.min_value is not None:
+                subwidget.attrs['min'] = subfield.min_value
+            if subfield.max_value is not None:
+                subwidget.attrs['max'] = subfield.max_value
+        return attrs

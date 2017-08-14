@@ -1,0 +1,8 @@
+<div class="form-date">
+  {% for widget in widget.subwidgets %}
+    <div class="{{ widget.group_classes }}">
+      <label id="{{ widget.attrs.id }}-label" class="{{ widget.label_classes }}" for="{{ widget.attrs.id }}">{{ widget.label }}</label>
+      {% include widget.template_name %}
+    </div>
+  {% endfor %}
+</div>

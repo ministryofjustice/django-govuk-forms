@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-13 23:14+0100\n"
+"POT-Creation-Date: 2017-08-17 14:51+0100\n"
 "Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -15,29 +15,74 @@ msgstr ""
 
 #: fields.py:24
 #, python-format
-msgid "Year should be between 1900 and %(current_year)s"
+msgid "Year should be between 1900 and %(current_year)s."
 msgstr ""
 
 #: fields.py:31
-msgid "Enter year as a number"
+msgid "Enter year as a number."
 msgstr ""
 
 #: fields.py:51
-msgid "Enter a valid date"
+msgid "Enter a valid date."
 msgstr ""
 
 #: fields.py:55
-msgid "Day should be between 1 and 31"
+msgid "Day should be between 1 and 31."
 msgstr ""
 
 #: fields.py:56
-msgid "Month should be between 1 and 12"
+msgid "Month should be between 1 and 12."
 msgstr ""
 
 #: fields.py:62
-msgid "Enter day as a number"
+msgid "Enter day as a number."
 msgstr ""
 
 #: fields.py:67
-msgid "Enter month as a number"
+msgid "Enter month as a number."
+msgstr ""
+
+#: forms.py:24
+msgid "There are problems in the form"
+msgstr ""
+
+#: forms.py:27
+msgid "Submit"
+msgstr ""
+
+#: templates/govuk_forms/widgets/multiple-select.html:11
+#: templates/govuk_forms/widgets/multiple-select.html:13 widgets.py:122
+msgid "or"
+msgstr ""
+
+#: widgets.py:71 widgets.py:239
+msgid "Day"
+msgstr ""
+
+#: widgets.py:71 widgets.py:239
+msgid "Month"
+msgstr ""
+
+#: widgets.py:71 widgets.py:239
+msgid "Year"
+msgstr ""
+
+#: widgets.py:96
+msgid "Date"
+msgstr ""
+
+#: widgets.py:96
+msgid "Time"
+msgstr ""
+
+#: widgets.py:209 widgets.py:234
+msgid "Not set"
+msgstr ""
+
+#: widgets.py:210
+msgid "Yes"
+msgstr ""
+
+#: widgets.py:211
+msgid "No"
 msgstr ""

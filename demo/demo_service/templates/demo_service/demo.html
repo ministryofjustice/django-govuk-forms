@@ -1,0 +1,18 @@
+{% extends 'govuk_template.html' %}
+{% load static %}
+
+{% block head %}
+  {{ block.super }}
+  <link href="{% static 'stylesheets/demo.css' %}" media="screen" rel="stylesheet" />
+{% endblock %}
+
+{% block inner_content %}
+  <h1 class="heading-xlarge">Demo form</h1>
+
+  <form method="post" novalidate {% if form.is_multipart %}enctype="multipart/form-data"{% endif %}>
+    {{ form.error_summary }}
+    {% csrf_token %}
+    {{ form.as_div }}
+    {{ form.submit_button }}
+  </form>
+{% endblock %}

@@ -1,0 +1,14 @@
+<div id="{{ bound_field.auto_id }}-group" class="{{ group_classes }}">
+  <label id="{{ bound_field.auto_id }}-label" class="{{ label_classes }}" for="{{ bound_field.auto_id }}">
+    {{ label }}
+    {% if help_text %}
+      <span class="{{ help_classes }}">{{ help_text }}</span>
+    {% endif %}
+  </label>
+
+  {% for error in errors %}
+    <span class="error-message">{{ error }}</span>
+  {% endfor %}
+
+  {{ rendered_field }}
+</div>
