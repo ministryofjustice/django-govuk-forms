@@ -38,7 +38,7 @@ class GOVUKForm(forms.Form):
                 field.widget = govuk_widgets.replace_widget(field.widget, widget_replacements)
 
     def __str__(self):
-        return self.as_fieldset()
+        return self.as_div()
 
     def get_group_template_name(self, widget):
         for widget_classes, template_name in self.group_template_names:
