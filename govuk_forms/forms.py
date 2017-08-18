@@ -27,9 +27,9 @@ class GOVUKForm(forms.Form):
     submit_button_label = _('Submit')
     submit_button_template_name = 'govuk_forms/submit-button.html'
 
-    def __init__(self, **kwargs):
+    def __init__(self, *args, **kwargs):
         kwargs.setdefault('label_suffix', '')
-        super().__init__(**kwargs)
+        super().__init__(*args, **kwargs)
         if self.auto_replace_widgets:
             widget_replacements = govuk_widgets.widget_replacements
             if hasattr(self, 'widget_replacements'):
