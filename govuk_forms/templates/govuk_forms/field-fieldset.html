@@ -1,0 +1,14 @@
+<div id="{{ bound_field.auto_id }}-group" class="{{ group_classes }}">
+  <fieldset>
+    <legend id="{{ bound_field.auto_id }}-label" class="{{ label_classes }}">{{ label }}</legend>
+    {% if help_text %}
+      <span class="{{ help_classes }}">{{ help_text }}</span>
+    {% endif %}
+
+    {% for error in errors %}
+      <span class="error-message">{{ error }}</span>
+    {% endfor %}
+
+    {{ rendered_field }}
+  </fieldset>
+</div>

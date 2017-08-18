@@ -22,7 +22,7 @@ __all__ = (
 
 group_template_names = (
     (widgets.Select, 'govuk_forms/field.html'),
-    ((widgets.MultiWidget, widgets.ChoiceWidget), 'govuk_forms/fieldset.html'),
+    ((widgets.MultiWidget, widgets.ChoiceWidget), 'govuk_forms/field-fieldset.html'),
     (widgets.CheckboxInput, 'govuk_forms/field-no-label.html'),
     (widgets.Widget, 'govuk_forms/field.html'),
 )
