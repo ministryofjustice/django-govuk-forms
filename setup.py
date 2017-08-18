@@ -16,7 +16,7 @@ package_info = importlib.import_module('govuk_forms')
 with open('README.rst') as readme:
     README = readme.read()
 
-setup_extensions = importlib.import_module('setup_extensions')
+setup_extensions = importlib.import_module('govuk_forms.setup_extensions')
 
 setup_requires = ['setuptools', 'pip', 'wheel']
 install_requires = ['django>=1.11']
@@ -29,7 +29,6 @@ setup(
     author=package_info.__author__,
     url='https://github.com/ministryofjustice/django-govuk-forms',
     packages=find_packages(exclude=['demo', 'tests']),
-    py_modules=['setup_extensions'],
     include_package_data=True,
     license='MIT',
     description='Django app that creates forms based on Government Digital Services style guide',
