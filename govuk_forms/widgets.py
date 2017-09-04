@@ -108,10 +108,15 @@ class CheckboxInput(widgets.CheckboxInput, Widget):
     inherit_label_from_field = True
     label = None
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.conditionally_revealed = {}
+
     def get_context(self, name, value, attrs):
         context = super().get_context(name, value, attrs)
         if self.label:
             context['widget']['label'] = self.label
+        context['conditionally_revealed'] = self.conditionally_revealed.get(True)
         return context
 
 
@@ -120,6 +125,10 @@ class ChoiceWidget(widgets.ChoiceWidget, Widget):
     option_template_name = 'govuk_forms/widgets/multiple-select-option.html'
     separate_last_option = False
     last_option_label = _('or')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.conditionally_revealed = {}
 
     @property
     def is_flat_list(self):
@@ -133,6 +142,12 @@ class ChoiceWidget(widgets.ChoiceWidget, Widget):
             last_option_label=self.last_option_label,
         )
         return context
+
+    def create_option(self, name, value, label, selected, index, subindex=None, attrs=None):
+        option = super().create_option(name, value, label, selected, index, subindex, attrs)
+        if self.conditionally_revealed:
+            option['conditionally_revealed'] = self.conditionally_revealed.get(value)
+        return option
 
 
 class CheckboxSelectMultiple(ChoiceWidget, widgets.CheckboxSelectMultiple):

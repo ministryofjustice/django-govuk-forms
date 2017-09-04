@@ -5,6 +5,7 @@ Unreleased
 ----------
 
 * Added grouping of fields into field sets
+* Added conditionally revealing sub-fields inside choice fields
 
 0.3
 ---

@@ -1,4 +1,7 @@
-<div class="multiple-choice">
+<div class="multiple-choice" {% if conditionally_revealed %}data-target="{{ conditionally_revealed.bound_field.auto_id }}-group"{% endif %}>
   {% include 'django/forms/widgets/input.html' %}
   <label id="{{ widget.attrs.id }}-label" for="{{ widget.attrs.id }}">{{ widget.label }}</label>
 </div>
+{% if conditionally_revealed %}
+  {{ conditionally_revealed.html }}
+{% endif %}

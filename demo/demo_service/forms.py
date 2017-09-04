@@ -85,3 +85,24 @@ class FieldsetForm(GOVUKForm):
     city = forms.CharField(label='City')
     postcode = forms.CharField(label='Postcode')
     country = forms.CharField(label='Country')
+
+
+class RevealingForm(GOVUKForm):
+    # customisations:
+    auto_replace_widgets = True
+    reveal_conditionally = {
+        'show': {True: 'hidden_at_first'},
+        'choices': {
+            'a': 'hidden_at_first_a',
+            'b': 'hidden_at_first_b',
+            'd': 'hidden_at_first_d',
+        },
+    }
+
+    show = forms.BooleanField(label='Show', required=False)
+    hidden_at_first = forms.CharField(label='Hidden at first')
+
+    choices = forms.ChoiceField(label='More options', choices=separated_options, widget=forms.CheckboxSelectMultiple)
+    hidden_at_first_a = forms.EmailField(label='Email')
+    hidden_at_first_b = forms.IntegerField(label='Number')
+    hidden_at_first_d = SplitDateField(label='Split date')

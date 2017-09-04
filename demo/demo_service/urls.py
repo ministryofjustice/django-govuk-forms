@@ -5,7 +5,7 @@ from random import choice
 from django.conf.urls import url
 from django.views.generic import FormView
 
-from demo_service.forms import SimpleForm, LongForm, FieldsetForm
+from demo_service.forms import SimpleForm, LongForm, FieldsetForm, RevealingForm
 
 random_option = partial(choice, ['a', 'b'])
 random_separated = partial(choice, ['a', 'b', 'c', 'd', 'e'])
@@ -41,4 +41,7 @@ urlpatterns = [
         'file': FakeFile(), 'clearable_file': FakeFile(),
     }), name='prefilled'),
     url(r'^fieldsets/$', view(form_class=FieldsetForm, success_url='demo:fieldsets'), name='fieldsets'),
+    url(r'^revealing/$', view(form_class=RevealingForm, success_url='demo:revealing', initial={
+        'choices': 'b',
+    }), name='revealing'),
 ]

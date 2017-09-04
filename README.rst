@@ -30,7 +30,6 @@ To do
 -----
 
 - Is HTML creation mechanic good?
-- Support conditionally-revealed input boxes [2]_
 
 Copyright
 ---------
@@ -41,4 +40,3 @@ Copyright © 2017 HM Government (Ministry of Justice Digital Services). See LICE
 .. _PyPi: https://pypi.org/project/django-govuk-forms/
 
 .. [1] https://github.com/ministryofjustice/django-govuk-template
-.. [2] http://govuk-elements.herokuapp.com/form-elements/#form-toggle-content

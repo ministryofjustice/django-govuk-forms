@@ -15,5 +15,6 @@ service_settings.header_links.add(Link.objects.create(name='Simple', link='demo:
 service_settings.header_links.add(Link.objects.create(name='Long', link='demo:long', link_is_view_name=True))
 service_settings.header_links.add(Link.objects.create(name='Pre-filled', link='demo:prefilled', link_is_view_name=True))
 service_settings.header_links.add(Link.objects.create(name='Field sets', link='demo:fieldsets', link_is_view_name=True))
+service_settings.header_links.add(Link.objects.create(name='Conditionally revealed', link='demo:revealing', link_is_view_name=True))
 service_settings.save()
 "

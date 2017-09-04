@@ -18,6 +18,7 @@ class GOVUKForm(forms.Form):
     group_template_names = govuk_widgets.group_template_names
 
     field_group_classes = 'form-group'
+    field_group_panel_classes = 'panel panel-border-narrow js-hidden'
     field_label_classes = 'form-label'  # or form-label-bold
     field_help_classes = 'form-hint'
 
@@ -27,18 +28,27 @@ class GOVUKForm(forms.Form):
     submit_button_label = _('Submit')
     submit_button_template_name = 'govuk_forms/submit-button.html'
 
+    reveal_conditionally = {}
     fieldsets = ()
     fieldset_template_name = 'govuk_forms/fieldset.html'
 
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('label_suffix', '')
         super().__init__(*args, **kwargs)
+
         if self.auto_replace_widgets:
             widget_replacements = govuk_widgets.widget_replacements
             if hasattr(self, 'widget_replacements'):
                 widget_replacements = widget_replacements.copy().update(self.widget_replacements)
             for field in self.fields.values():
                 field.widget = govuk_widgets.replace_widget(field.widget, widget_replacements)
+
+        self.conditionally_revealed = {}
+        for target_fields in self.reveal_conditionally.values():
+            for target_field in target_fields.values():
+                self.conditionally_revealed[target_field] = ''
+                field = self.fields[target_field]
+                field.required = False
 
     def __str__(self):
         return self.as_div()
@@ -52,6 +62,10 @@ class GOVUKForm(forms.Form):
     def as_div(self):
         rows = []
         included_fields = set()
+        for field_name in self.conditionally_revealed:
+            included_fields.add(field_name)
+            self.conditionally_revealed[field_name] = self.render_field(field_name, self.fields[field_name],
+                                                                        in_panel=True)
         for legend, field_names in self.fieldsets:
             included_fields.update(field_names)
             context = {
@@ -69,14 +83,22 @@ class GOVUKForm(forms.Form):
         )
         return format_html_join('\n\n', '{}', rows)
 
-    def render_field(self, name, field):
+    def render_field(self, name, field, in_panel=False):
         bound_field = self[name]
         if bound_field.is_hidden:
             return bound_field
 
         widget = field.widget
+        if hasattr(widget, 'conditionally_revealed'):
+            widget.conditionally_revealed = {
+                value: {
+                    'bound_field': self[target_field],
+                    'html': self.conditionally_revealed[target_field],
+                }
+                for value, target_field in self.reveal_conditionally.get(name, {}).items()
+            }
         errors = [conditional_escape(error) for error in bound_field.errors]
-        group_classes = self.field_group_classes
+        group_classes = self.field_group_panel_classes if in_panel else self.field_group_classes
         if hasattr(widget, 'field_group_classes'):
             group_classes = '%s %s' % (group_classes, widget.field_group_classes)
         group_classes = bound_field.css_classes(group_classes)
