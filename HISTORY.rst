@@ -1,8 +1,8 @@
 Change log
 ==========
 
-Unreleased
-----------
+0.4
+---
 
 * Added grouping of fields into field sets
 * Added conditionally revealing sub-fields inside choice fields
