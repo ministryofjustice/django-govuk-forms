@@ -17,7 +17,7 @@ __all__ = (
     'Select', 'NullBooleanSelect', 'SelectMultiple',
 
     'FileInput', 'ClearableFileInput',
-    # 'SelectDateWidget',
+    'SelectDateWidget',
 )
 
 group_template_names = (
