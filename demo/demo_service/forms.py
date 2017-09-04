@@ -94,9 +94,13 @@ class RevealingForm(GOVUKForm):
     reveal_conditionally = {
         'show': {True: 'hidden_at_first'},
         'choices': {
-            'a': 'hidden_at_first_a',
-            'b': 'hidden_at_first_b',
-            'd': 'hidden_at_first_d',
+            'a': 'choices_a',
+            'b': 'choices_b',
+            'd': 'choices_d',
+        },
+        'multi_choices': {
+            'a': 'multi_choices_a',
+            'b': 'multi_choices_b',
         },
     }
 
@@ -104,6 +108,11 @@ class RevealingForm(GOVUKForm):
     hidden_at_first = forms.CharField(label='Hidden at first')
 
     choices = forms.ChoiceField(label='More options', choices=separated_options, widget=forms.RadioSelect)
-    hidden_at_first_a = forms.EmailField(label='Email')
-    hidden_at_first_b = forms.IntegerField(label='Number')
-    hidden_at_first_d = SplitDateField(label='Split date')
+    choices_a = forms.EmailField(label='Email', required=False)
+    choices_b = forms.IntegerField(label='Number')
+    choices_d = SplitDateField(label='Split date')
+
+    multi_choices = forms.MultipleChoiceField(label='Multi-choice', required=False, choices=options,
+                                              widget=forms.CheckboxSelectMultiple)
+    multi_choices_a = forms.CharField(label='Why this option?', widget=forms.Textarea)
+    multi_choices_b = forms.CharField(label='Please specify')

@@ -1,6 +1,7 @@
 from collections import OrderedDict
 
 from django import forms
+from django.core.exceptions import ValidationError
 from django.utils.crypto import get_random_string
 from django.utils.encoding import force_text
 from django.utils.html import conditional_escape, format_html_join
@@ -46,12 +47,36 @@ class GOVUKForm(forms.Form):
         self.conditionally_revealed = {}
         for target_fields in self.reveal_conditionally.values():
             for target_field in target_fields.values():
-                self.conditionally_revealed[target_field] = ''
                 field = self.fields[target_field]
+                self.conditionally_revealed[target_field] = {
+                    'required': field.required,
+                }
                 field.required = False
 
     def __str__(self):
         return self.as_div()
+
+    def clean(self):
+        super().clean()
+        for choice_field_name, details in self.reveal_conditionally.items():
+            chosen_value = self.cleaned_data.get(choice_field_name, object())
+            choice_field = self.fields[choice_field_name]
+            multi_choice = isinstance(choice_field, forms.MultipleChoiceField)
+            if not multi_choice:
+                chosen_value = [chosen_value]
+            for chosen_value in chosen_value:
+                target_field_name = details.get(chosen_value)
+                if not target_field_name:
+                    continue
+                conditionally_revealed = self.conditionally_revealed.get(target_field_name)
+                if not conditionally_revealed.get('required'):
+                    continue
+                target_value = self.cleaned_data[target_field_name]
+                target_field = self.fields[target_field_name]
+                if target_value in target_field.empty_values:
+                    self.add_error(target_field_name, ValidationError(target_field.error_messages['required'],
+                                                                      code='required'))
+        return self.cleaned_data
 
     def get_group_template_name(self, widget):
         for widget_classes, template_name in self.group_template_names:
@@ -62,10 +87,9 @@ class GOVUKForm(forms.Form):
     def as_div(self):
         rows = []
         included_fields = set()
-        for field_name in self.conditionally_revealed:
+        for field_name, conditionally_revealed in self.conditionally_revealed.items():
             included_fields.add(field_name)
-            self.conditionally_revealed[field_name] = self.render_field(field_name, self.fields[field_name],
-                                                                        in_panel=True)
+            conditionally_revealed['html'] = self.render_field(field_name, self.fields[field_name], in_panel=True)
         for legend, field_names in self.fieldsets:
             included_fields.update(field_names)
             context = {
@@ -93,7 +117,7 @@ class GOVUKForm(forms.Form):
             widget.conditionally_revealed = {
                 value: {
                     'bound_field': self[target_field],
-                    'html': self.conditionally_revealed[target_field],
+                    'html': self.conditionally_revealed[target_field]['html'],
                 }
                 for value, target_field in self.reveal_conditionally.get(name, {}).items()
             }
