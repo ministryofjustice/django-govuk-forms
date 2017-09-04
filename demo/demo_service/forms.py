@@ -51,12 +51,13 @@ class LongForm(GOVUKForm):
     yes_no = forms.BooleanField(label='Yes/no')
     yes_no_null = forms.NullBooleanField(label='Yes/no/null', required=False)
 
-    check = forms.ChoiceField(label='Checkboxes', choices=options, widget=forms.CheckboxSelectMultiple)
-    check_inline = forms.ChoiceField(label='Checkboxes inline', choices=options, widget=InlineCheckboxSelectMultiple)
-    check_separated = forms.ChoiceField(label='Checkboxes separated', choices=separated_options,
-                                        widget=SeparatedCheckboxSelectMultiple)
-    check_grouped = forms.ChoiceField(label='Checkboxes with groups', choices=grouped_options,
-                                      widget=forms.CheckboxSelectMultiple)
+    check = forms.MultipleChoiceField(label='Checkboxes', choices=options, widget=forms.CheckboxSelectMultiple)
+    check_inline = forms.MultipleChoiceField(label='Checkboxes inline', choices=options,
+                                             widget=InlineCheckboxSelectMultiple)
+    check_separated = forms.MultipleChoiceField(label='Checkboxes separated', choices=separated_options,
+                                                widget=SeparatedCheckboxSelectMultiple)
+    check_grouped = forms.MultipleChoiceField(label='Checkboxes with groups', choices=grouped_options,
+                                              widget=forms.CheckboxSelectMultiple)
     radio = forms.ChoiceField(label='Radio', choices=options, widget=forms.RadioSelect)
     radio_inline = forms.ChoiceField(label='Radio inline', choices=options, widget=InlineRadioSelect)
     radio_separated = forms.ChoiceField(label='Radio separated', choices=separated_options, widget=SeparatedRadioSelect)
@@ -102,7 +103,7 @@ class RevealingForm(GOVUKForm):
     show = forms.BooleanField(label='Show', required=False)
     hidden_at_first = forms.CharField(label='Hidden at first')
 
-    choices = forms.ChoiceField(label='More options', choices=separated_options, widget=forms.CheckboxSelectMultiple)
+    choices = forms.ChoiceField(label='More options', choices=separated_options, widget=forms.RadioSelect)
     hidden_at_first_a = forms.EmailField(label='Email')
     hidden_at_first_b = forms.IntegerField(label='Number')
     hidden_at_first_d = SplitDateField(label='Split date')

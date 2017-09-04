@@ -3,6 +3,7 @@ from functools import partial
 from random import choice
 
 from django.conf.urls import url
+from django.urls import reverse_lazy
 from django.views.generic import FormView
 
 from demo_service.forms import SimpleForm, LongForm, FieldsetForm, RevealingForm
@@ -22,9 +23,9 @@ class FakeFile:
 app_name = 'demo'
 view = partial(FormView.as_view, template_name='demo_service/demo.html')
 urlpatterns = [
-    url(r'^$', view(form_class=SimpleForm, success_url='demo:simple'), name='simple'),
-    url(r'^long/$', view(form_class=LongForm, success_url='demo:long'), name='long'),
-    url(r'^prefilled/$', view(form_class=LongForm, success_url='demo:prefilled', initial={
+    url(r'^$', view(form_class=SimpleForm, success_url=reverse_lazy('demo:simple')), name='simple'),
+    url(r'^long/$', view(form_class=LongForm, success_url=reverse_lazy('demo:long')), name='long'),
+    url(r'^prefilled/$', view(form_class=LongForm, success_url=reverse_lazy('demo:prefilled'), initial={
         'text': 'sample', 'text_optional': 'not necessary', 'text_with_hint': 'hint helped',
         'email': 'example@gov.uk', 'url': 'gov.uk', 'password': '1234',
         'number': 123, 'textarea': '\nLorem ipsum\n',
@@ -40,8 +41,8 @@ urlpatterns = [
         'hidden': 'secret',
         'file': FakeFile(), 'clearable_file': FakeFile(),
     }), name='prefilled'),
-    url(r'^fieldsets/$', view(form_class=FieldsetForm, success_url='demo:fieldsets'), name='fieldsets'),
-    url(r'^revealing/$', view(form_class=RevealingForm, success_url='demo:revealing', initial={
+    url(r'^fieldsets/$', view(form_class=FieldsetForm, success_url=reverse_lazy('demo:fieldsets')), name='fieldsets'),
+    url(r'^revealing/$', view(form_class=RevealingForm, success_url=reverse_lazy('demo:revealing'), initial={
         'choices': 'b',
     }), name='revealing'),
 ]
