@@ -11,7 +11,9 @@ from govuk_template_base.models import ServiceSettings, Link
 service_settings = ServiceSettings.default_settings()
 service_settings.name = 'Demo service'
 service_settings.phase = 'alpha'
-service_settings.header_links.add(Link.objects.create(name='Sample form', link='demo:empty', link_is_view_name=True))
-service_settings.header_links.add(Link.objects.create(name='Non-empty', link='demo:with-data', link_is_view_name=True))
+service_settings.header_links.add(Link.objects.create(name='Simple', link='demo:simple', link_is_view_name=True))
+service_settings.header_links.add(Link.objects.create(name='Long', link='demo:long', link_is_view_name=True))
+service_settings.header_links.add(Link.objects.create(name='Pre-filled', link='demo:prefilled', link_is_view_name=True))
+service_settings.header_links.add(Link.objects.create(name='Field sets', link='demo:fieldsets', link_is_view_name=True))
 service_settings.save()
 "

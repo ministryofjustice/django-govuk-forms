@@ -27,6 +27,9 @@ class GOVUKForm(forms.Form):
     submit_button_label = _('Submit')
     submit_button_template_name = 'govuk_forms/submit-button.html'
 
+    fieldsets = ()
+    fieldset_template_name = 'govuk_forms/fieldset.html'
+
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('label_suffix', '')
         super().__init__(*args, **kwargs)
@@ -48,57 +51,71 @@ class GOVUKForm(forms.Form):
 
     def as_div(self):
         rows = []
-
-        for name, field in self.fields.items():
-            bound_field = self[name]
-            if bound_field.is_hidden:
-                rows.append(bound_field)
-                continue
-
-            widget = field.widget
-            errors = [conditional_escape(error) for error in bound_field.errors]
-            group_classes = self.field_group_classes
-            if hasattr(widget, 'field_group_classes'):
-                group_classes = '%s %s' % (group_classes, widget.field_group_classes)
-            group_classes = bound_field.css_classes(group_classes)
-            label_classes = self.field_label_classes
-            help_classes = self.field_help_classes
-            if bound_field.label:
-                label = conditional_escape(force_text(bound_field.label))
-            else:
-                label = ''
-            if getattr(widget, 'inherit_label_from_field', False):
-                widget.label = label
-            if field.help_text:
-                help_text = force_text(field.help_text)
-            else:
-                help_text = ''
-
-            if errors:
-                widget_classes = getattr(widget, 'input_error_classes', 'form-control-error')
-            else:
-                widget_classes = ''
-            widget_attrs = {
-                'class': widget_classes,
+        included_fields = set()
+        for legend, field_names in self.fieldsets:
+            included_fields.update(field_names)
+            context = {
+                'legend': legend,
+                'contents': format_html_join('\n\n', '{}', (
+                    (self.render_field(field_name, self.fields[field_name]),)
+                    for field_name in field_names
+                )),
             }
-            rendered_field = bound_field.as_widget(attrs=widget_attrs)
-            if field.show_hidden_initial:
-                rendered_field += bound_field.as_hidden(only_initial=True)
+            rows.append((mark_safe(self.renderer.render(self.fieldset_template_name, context)),))
+        rows.extend(
+            (self.render_field(name, field),)
+            for name, field in self.fields.items()
+            if name not in included_fields
+        )
+        return format_html_join('\n\n', '{}', rows)
 
-            field_context = {
-                'bound_field': bound_field,
-                'rendered_field': rendered_field,
-                'errors': errors,
-                'group_classes': group_classes.strip(),
-                'label_classes': label_classes.strip(),
-                'help_classes': help_classes.strip(),
-                'label': label,
-                'help_text': help_text,
-            }
-            group_template_name = self.get_group_template_name(widget)
-            rows.append(mark_safe(self.renderer.render(group_template_name, field_context)))
+    def render_field(self, name, field):
+        bound_field = self[name]
+        if bound_field.is_hidden:
+            return bound_field
 
-        return format_html_join('\n\n', '{}', ((row,) for row in rows))
+        widget = field.widget
+        errors = [conditional_escape(error) for error in bound_field.errors]
+        group_classes = self.field_group_classes
+        if hasattr(widget, 'field_group_classes'):
+            group_classes = '%s %s' % (group_classes, widget.field_group_classes)
+        group_classes = bound_field.css_classes(group_classes)
+        label_classes = self.field_label_classes
+        help_classes = self.field_help_classes
+        if bound_field.label:
+            label = conditional_escape(force_text(bound_field.label))
+        else:
+            label = ''
+        if getattr(widget, 'inherit_label_from_field', False):
+            widget.label = label
+        if field.help_text:
+            help_text = force_text(field.help_text)
+        else:
+            help_text = ''
+
+        if errors:
+            widget_classes = getattr(widget, 'input_error_classes', 'form-control-error')
+        else:
+            widget_classes = ''
+        widget_attrs = {
+            'class': widget_classes,
+        }
+        rendered_field = bound_field.as_widget(attrs=widget_attrs)
+        if field.show_hidden_initial:
+            rendered_field += bound_field.as_hidden(only_initial=True)
+
+        field_context = {
+            'bound_field': bound_field,
+            'rendered_field': rendered_field,
+            'errors': errors,
+            'group_classes': group_classes.strip(),
+            'label_classes': label_classes.strip(),
+            'help_classes': help_classes.strip(),
+            'label': label,
+            'help_text': help_text,
+        }
+        group_template_name = self.get_group_template_name(widget)
+        return mark_safe(self.renderer.render(group_template_name, field_context))
 
     def error_summary(self, error_summary_title=None):
         errors = self.errors

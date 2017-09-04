@@ -14,6 +14,9 @@ grouped_options = (
 
 
 class SimpleForm(GOVUKForm):
+    # customisations:
+    auto_replace_widgets = True
+
     name = forms.CharField()
     email = forms.EmailField()
 
@@ -63,3 +66,22 @@ class LongForm(GOVUKForm):
 
     file = forms.FileField(label='Upload a file', widget=forms.FileInput)
     clearable_file = forms.FileField(label='Clearable upload a file')
+
+
+class FieldsetForm(GOVUKForm):
+    # customisations:
+    auto_replace_widgets = True
+    fieldsets = [
+        ['Enter your name', ['first_name', 'last_name']],
+        ['Enter your address', ['address', 'city', 'postcode', 'country']],
+    ]
+
+    last_name = forms.CharField(label='Surname')
+    first_name = forms.CharField(label='First name')
+
+    email = forms.EmailField(label='E-mail address', help_text='We will only use this to send you a receipt')
+
+    address = forms.CharField(label='Street', help_text='Include your flat or building number')
+    city = forms.CharField(label='City')
+    postcode = forms.CharField(label='Postcode')
+    country = forms.CharField(label='Country')

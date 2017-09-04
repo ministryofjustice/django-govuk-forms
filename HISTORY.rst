@@ -1,6 +1,11 @@
 Change log
 ==========
 
+Unreleased
+----------
+
+* Added grouping of fields into field sets
+
 0.3
 ---
 

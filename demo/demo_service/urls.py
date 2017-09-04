@@ -5,7 +5,7 @@ from random import choice
 from django.conf.urls import url
 from django.views.generic import FormView
 
-from demo_service.forms import LongForm
+from demo_service.forms import SimpleForm, LongForm, FieldsetForm
 
 random_option = partial(choice, ['a', 'b'])
 random_separated = partial(choice, ['a', 'b', 'c', 'd', 'e'])
@@ -20,11 +20,11 @@ class FakeFile:
 
 
 app_name = 'demo'
-view = partial(FormView.as_view, form_class=LongForm, template_name='demo_service/demo.html')
+view = partial(FormView.as_view, template_name='demo_service/demo.html')
 urlpatterns = [
-    url(r'^$', view(success_url='demo:empty'), name='empty'),
-
-    url(r'^with-data/$', view(success_url='demo:with-data', initial={
+    url(r'^$', view(form_class=SimpleForm, success_url='demo:simple'), name='simple'),
+    url(r'^long/$', view(form_class=LongForm, success_url='demo:long'), name='long'),
+    url(r'^prefilled/$', view(form_class=LongForm, success_url='demo:prefilled', initial={
         'text': 'sample', 'text_optional': 'not necessary', 'text_with_hint': 'hint helped',
         'email': 'example@gov.uk', 'url': 'gov.uk', 'password': '1234',
         'number': 123, 'textarea': '\nLorem ipsum\n',
@@ -39,5 +39,6 @@ urlpatterns = [
         'radio_grouped': random_grouped(),
         'hidden': 'secret',
         'file': FakeFile(), 'clearable_file': FakeFile(),
-    }), name='with-data'),
+    }), name='prefilled'),
+    url(r'^fieldsets/$', view(form_class=FieldsetForm, success_url='demo:fieldsets'), name='fieldsets'),
 ]

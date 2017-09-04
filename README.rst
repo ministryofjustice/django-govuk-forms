@@ -29,7 +29,6 @@ Distribute a new version to `PyPi`_ by updating the ``VERSION`` tuple in ``govuk
 To do
 -----
 
-- Allow fields to be grouped into field sets
 - Is HTML creation mechanic good?
 - Support conditionally-revealed input boxes [2]_
 
