@@ -13,8 +13,15 @@ Usage
 - Add ``govuk_forms`` to ``INSTALLED_APPS``
 - Inherit forms from ``govuk_forms.forms.GOVUKForm`` and use widgets from ``govuk_forms.widgets``
 
+See the demo folder in this repository on `GitHub`_, it is not included in distributions.
+
+NB: Until version 1.0, there is likely going to be a lot of variation in the api, so it’s a good idea to pin a specific version.
+
 Development
 -----------
+
+.. image:: https://travis-ci.org/ministryofjustice/django-govuk-forms.svg?branch=master
+    :target: https://travis-ci.org/ministryofjustice/django-govuk-forms
 
 Please report bugs and open pull requests on `GitHub`_.
 
@@ -34,7 +41,7 @@ To do
 Copyright
 ---------
 
-Copyright © 2017 HM Government (Ministry of Justice Digital Services). See LICENSE.txt for further details.
+Copyright © 2018 HM Government (Ministry of Justice Digital Services). See LICENSE.txt for further details.
 
 .. _GitHub: https://github.com/ministryofjustice/django-govuk-forms
 .. _PyPi: https://pypi.org/project/django-govuk-forms/
