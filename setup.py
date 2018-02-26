@@ -20,6 +20,7 @@ setup_requires = ['setuptools', 'pip', 'wheel']
 install_requires = ['django>=1.11']
 extras_require = {}
 tests_require = ['flake8']
+setup_requires += install_requires
 
 setup(
     name='django-govuk-forms',
