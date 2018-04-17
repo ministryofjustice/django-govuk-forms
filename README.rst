@@ -6,6 +6,8 @@ It should be easy to make a Django-based service that follows Government Digital
 This Django app allows forms to be output using the HTML that can be styled using GOV.UK elements.
 The styles themselves are provided by another package [1]_.
 
+NB: Until version 1.0, there is likely going to be a lot of variation in the api, so it’s a good idea to pin a specific minor version.
+
 Usage
 -----
 
@@ -14,8 +16,6 @@ Usage
 - Inherit forms from ``govuk_forms.forms.GOVUKForm`` and use widgets from ``govuk_forms.widgets``
 
 See the demo folder in this repository on `GitHub`_, it is not included in distributions.
-
-NB: Until version 1.0, there is likely going to be a lot of variation in the api, so it’s a good idea to pin a specific version.
 
 Development
 -----------
