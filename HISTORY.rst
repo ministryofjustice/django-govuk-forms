@@ -1,6 +1,16 @@
 Change log
 ==========
 
+0.6
+---
+
+* Updated demo to use latest ``django-govuk-template``
+
+0.5
+---
+
+* Improved packaging
+
 0.4
 ---
 
