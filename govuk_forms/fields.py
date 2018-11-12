@@ -16,17 +16,20 @@ class YearField(forms.IntegerField):
 
     def __init__(self, era_boundary=None, **kwargs):
         self.current_year = now().year
+        self.min_year = kwargs.pop('min_year', 1900)
+        self.max_year = kwargs.pop('max_year', self.current_year) 
         self.century = 100 * (self.current_year // 100)
         if era_boundary is None:
             # 2-digit dates are a minimum of 10 years ago by default
             era_boundary = self.current_year - self.century - 10
         self.era_boundary = era_boundary
-        bounds_error = gettext('Year should be between 1900 and %(current_year)s.') % {
-            'current_year': self.current_year
+        bounds_error = gettext('Year should be between %(min_year)s and %(max_year)s.') % {
+            'min_year': self.min_year,
+            'max_year': self.max_year,
         }
         options = {
-            'min_value': 1900,
-            'max_value': self.current_year,
+            'min_value': self.min_year,
+            'max_value': self.max_year,
             'error_messages': {
                 'min_value': bounds_error,
                 'max_value': bounds_error,
@@ -57,6 +60,15 @@ class SplitDateField(forms.MultiValueField):
         day_bounds_error = gettext('Day should be between 1 and 31.')
         month_bounds_error = gettext('Month should be between 1 and 12.')
 
+        year_data = {
+            'min_year': kwargs.pop('min_year', None),
+            'max_year': kwargs.pop('max_year', None)
+        }
+        year_kwargs = dict(filter(
+            lambda arg: arg[1] is not None,
+            year_data.items()
+        ))
+
         self.fields = [
             forms.IntegerField(min_value=1, max_value=31, error_messages={
                 'min_value': day_bounds_error,
@@ -68,7 +80,7 @@ class SplitDateField(forms.MultiValueField):
                 'max_value': month_bounds_error,
                 'invalid': gettext('Enter month as a number.')
             }),
-            YearField(),
+            YearField(**year_kwargs),
         ]
 
         super().__init__(self.fields, *args, **kwargs)
