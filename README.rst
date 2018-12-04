@@ -1,6 +1,8 @@
 Django GOV.UK Forms
 ===================
 
+**This library has not yet been updated to use the new** `Design system`_
+
 It should be easy to make a Django-based service that follows Government Digital Services’ style guide and reference materials.
 
 This Django app allows forms to be output using the HTML that can be styled using GOV.UK elements.
@@ -44,6 +46,7 @@ Copyright
 Copyright (C) 2018 HM Government (Ministry of Justice Digital Services).
 See LICENSE.txt for further details.
 
+.. _Design system: https://design-system.service.gov.uk/
 .. _GitHub: https://github.com/ministryofjustice/django-govuk-forms
 .. _PyPi: https://pypi.org/project/django-govuk-forms/
 
