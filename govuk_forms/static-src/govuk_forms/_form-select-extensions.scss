@@ -1,0 +1,27 @@
+@import "govuk-frontend/settings/all";
+@import "govuk-frontend/tools/all";
+@import "govuk-frontend/helpers/all";
+
+@include govuk-exports("govuk_forms/select") {
+    .govuk-select-multiple {
+        @include govuk-font($size: 19);
+        @include govuk-focusable;
+
+        box-sizing: border-box;
+        width: 100%;
+        margin-top: 0;
+
+        padding: govuk-spacing(1);
+        border: $govuk-border-width-form-element solid $govuk-input-border-colour;
+        border-radius: 0;
+
+        // Disable inner shadow and remove rounded corners
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+    }
+
+    .govuk-select-multiple--error {
+        border: $govuk-border-width-form-element-error solid $govuk-error-colour;
+    }
+}

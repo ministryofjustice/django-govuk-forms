@@ -24,7 +24,6 @@ class SimpleForm(GOVUKForm):
 class LongForm(GOVUKForm):
     # customisations:
     auto_replace_widgets = True
-    field_label_classes = 'form-label-bold'
     prefix = 'demo'
 
     text = forms.CharField(label='Some required text')
@@ -66,7 +65,7 @@ class LongForm(GOVUKForm):
     hidden = forms.CharField(label='Hidden', widget=forms.HiddenInput)
 
     file = forms.FileField(label='Upload a file', widget=forms.FileInput)
-    clearable_file = forms.FileField(label='Clearable upload a file')
+    clearable_file = forms.FileField(label='Clearable upload a file', required=False)
 
 
 class FieldsetForm(GOVUKForm):

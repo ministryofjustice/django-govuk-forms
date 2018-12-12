@@ -1,0 +1,13 @@
+@import "govuk-frontend/settings/all";
+@import "govuk-frontend/tools/all";
+@import "govuk-frontend/helpers/all";
+
+@include govuk-exports("govuk_forms/validation") {
+    .govuk-error-summary__list {
+        a:not([href]), a[href=''] {
+            color: $govuk-error-colour;
+            text-decoration: none;
+            cursor: inherit;
+        }
+    }
+}

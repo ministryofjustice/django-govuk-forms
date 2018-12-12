@@ -1,0 +1,15 @@
+<div id="{{ bound_field.auto_id }}__group" class="{{ group_classes }}">
+    <fieldset class="govuk-fieldset" {% if help_text %}aria-describedby="{{ bound_field.auto_id }}__help"{% endif %}>
+        <legend id="{{ bound_field.auto_id }}__label" class="{{ legend_classes }}">{{ label }}</legend>
+
+        {% if help_text %}
+            <span id="{{ bound_field.auto_id }}__help" class="{{ help_classes }}">{{ help_text }}</span>
+        {% endif %}
+
+        {% for error in errors %}
+            <span class="govuk-error-message">{{ error }}</span>
+        {% endfor %}
+
+        {{ rendered_field }}
+    </fieldset>
+</div>

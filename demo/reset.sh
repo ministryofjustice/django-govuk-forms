@@ -18,11 +18,7 @@ from govuk_template_base.service_settings import default_settings
 service_settings = default_settings()
 service_settings.name = 'Demo service'
 service_settings.phase = 'alpha'
-service_settings.header_links.add(Link.objects.create(name='Simple', link='demo:simple', link_is_view_name=True))
-service_settings.header_links.add(Link.objects.create(name='Long', link='demo:long', link_is_view_name=True))
-service_settings.header_links.add(Link.objects.create(name='Pre-filled', link='demo:prefilled', link_is_view_name=True))
-service_settings.header_links.add(Link.objects.create(name='Field sets', link='demo:fieldsets', link_is_view_name=True))
-service_settings.header_links.add(Link.objects.create(name='Conditionally revealed', link='demo:revealing', link_is_view_name=True))
+service_settings.header_link_view_name = 'demo:start'
 service_settings.save()
 "
 echo Run demo using "./manage.py runserver" or "./manage.py runserver --settings settings_without_db"

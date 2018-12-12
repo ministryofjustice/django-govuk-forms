@@ -1,24 +1,27 @@
 {% with optgroups=widget.optgroups %}
-  {% for group, options, index in optgroups %}
-    {% if group %}
-      <fieldset id="{{ widget.attrs.id }}-{{ index }}-group">
-        <legend id="{{ widget.attrs.id }}-{{ index }}-label">{{ group }}</legend>
-    {% endif %}
+    <div class="{{ widget.choices_wrapper_classes }}" {% if conditionally_revealed_module %}data-module="{{ conditionally_revealed_module }}"{% endif %}>
+        {% for group, options, index in optgroups %}
+            {% if group %}
+                <fieldset id="{{ widget.attrs.id }}-{{ index }}-group" class="govuk-fieldset">
+                <legend id="{{ widget.attrs.id }}-{{ index }}-label" class="{{ option_group_legend_classes }}">{{ group }}</legend>
+            {% endif %}
 
-    {% for option in options %}
-      {% if separate_last_option %}
-        {% if is_flat_list and optgroups|length > 1 and index == optgroups|length|add:'-1' %}
-          <p class="form-block">{{ last_option_label|default:_('or') }}</p>
-        {% elif options|length > 1 and forloop.last %}
-          <p class="form-block">{{ last_option_label|default:_('or') }}</p>
-        {% endif %}
-      {% endif %}
 
-      {% include option.template_name with widget=option %}
-    {% endfor %}
+            {% for option in options %}
+                {% if separate_last_option %}
+                    {% if is_flat_list and optgroups|length > 1 and index == optgroups|length|add:'-1' %}
+                        <p class="{{ divider_classes }}">{{ last_option_divider|default:_('or') }}</p>
+                    {% elif options|length > 1 and forloop.last %}
+                        <p class="{{ divider_classes }}">{{ last_option_divider|default:_('or') }}</p>
+                    {% endif %}
+                {% endif %}
 
-    {% if group %}
-      </fieldset>
-    {% endif %}
-  {% endfor %}
+                {% include option.template_name with widget=option %}
+            {% endfor %}
+
+            {% if group %}
+                </fieldset>
+            {% endif %}
+        {% endfor %}
+    </div>
 {% endwith %}

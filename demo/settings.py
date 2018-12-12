@@ -34,16 +34,15 @@ INSTALLED_APPS = [
     # installed distribution
     'govuk_template_base',
     'govuk_forms',
+
+    # this demo (not included in distribution)
+    'demo_service',
 ]
 if os.path.isdir(os.path.join(BASE_DIR, 'govuk_template')):
     INSTALLED_APPS += [
         # simulating inclusion once `startgovukapp` is called
         'govuk_template',
     ]
-INSTALLED_APPS += [
-    # this demo (not included in distribution)
-    'demo_service',
-]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -66,7 +65,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'govuk_template_base.context_processors.govuk_template_base',
+                'govuk_template.context_processors.govuk_template',
             ],
         },
     },

@@ -12,26 +12,28 @@ from govuk_forms import widgets as govuk_widgets
 
 
 class GOVUKForm(forms.Form):
-    error_css_class = 'form-group-error'
-    required_css_class = 'form-group-required'  # no default styling
-
     auto_replace_widgets = False
     group_template_names = govuk_widgets.group_template_names
 
-    field_group_classes = 'form-group'
-    field_group_panel_classes = 'panel panel-border-narrow js-hidden'
-    field_label_classes = 'form-label'  # or form-label-bold
-    field_help_classes = 'form-hint'
+    error_css_class = 'govuk-form-group--error'
+    required_css_class = 'govuk-form-group--required'  # no default styling
+
+    field_group_classes = 'govuk-form-group'
+    field_legend_classes = 'govuk-fieldset__legend'
+    field_label_classes = 'govuk-label'
+    field_help_classes = 'govuk-hint'
 
     error_summary_title = _('There are problems in the form')
     error_summary_template_name = 'govuk_forms/error-summary.html'
 
-    submit_button_label = _('Submit')
+    submit_button_label = _('Continue')
     submit_button_template_name = 'govuk_forms/submit-button.html'
 
     reveal_conditionally = {}
+
     fieldsets = ()
     fieldset_template_name = 'govuk_forms/fieldset.html'
+    fieldset_legend_classes = 'govuk-fieldset__legend govuk-fieldset__legend--m'
 
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('label_suffix', '')
@@ -79,6 +81,8 @@ class GOVUKForm(forms.Form):
         return self.cleaned_data
 
     def get_group_template_name(self, widget):
+        if hasattr(widget, 'group_template_name'):
+            return widget.group_template_name
         for widget_classes, template_name in self.group_template_names:
             if isinstance(widget, widget_classes):
                 return template_name
@@ -89,7 +93,7 @@ class GOVUKForm(forms.Form):
         included_fields = set()
         for field_name, conditionally_revealed in self.conditionally_revealed.items():
             included_fields.add(field_name)
-            conditionally_revealed['html'] = self.render_field(field_name, self.fields[field_name], in_panel=True)
+            conditionally_revealed['html'] = self.render_field(field_name, self.fields[field_name])
         for legend, field_names in self.fieldsets:
             included_fields.update(field_names)
             context = {
@@ -98,6 +102,7 @@ class GOVUKForm(forms.Form):
                     (self.render_field(field_name, self.fields[field_name]),)
                     for field_name in field_names
                 )),
+                'classes': self.fieldset_legend_classes,
             }
             rows.append((mark_safe(self.renderer.render(self.fieldset_template_name, context)),))
         rows.extend(
@@ -107,7 +112,7 @@ class GOVUKForm(forms.Form):
         )
         return format_html_join('\n\n', '{}', rows)
 
-    def render_field(self, name, field, in_panel=False):
+    def render_field(self, name, field):
         bound_field = self[name]
         if bound_field.is_hidden:
             return bound_field
@@ -122,10 +127,8 @@ class GOVUKForm(forms.Form):
                 for value, target_field in self.reveal_conditionally.get(name, {}).items()
             }
         errors = [conditional_escape(error) for error in bound_field.errors]
-        group_classes = self.field_group_panel_classes if in_panel else self.field_group_classes
-        if hasattr(widget, 'field_group_classes'):
-            group_classes = '%s %s' % (group_classes, widget.field_group_classes)
-        group_classes = bound_field.css_classes(group_classes)
+        group_classes = bound_field.css_classes(self.field_group_classes)
+        legend_classes = self.field_legend_classes
         label_classes = self.field_label_classes
         help_classes = self.field_help_classes
         if bound_field.label:
@@ -139,8 +142,11 @@ class GOVUKForm(forms.Form):
         else:
             help_text = ''
 
-        if errors:
-            widget_classes = getattr(widget, 'input_error_classes', 'form-control-error')
+        if errors and hasattr(widget, 'input_error_classes'):
+            if callable(widget.input_error_classes):
+                widget_classes = widget.input_error_classes()
+            else:
+                widget_classes = widget.input_error_classes
         else:
             widget_classes = ''
         widget_attrs = {
@@ -155,6 +161,7 @@ class GOVUKForm(forms.Form):
             'rendered_field': rendered_field,
             'errors': errors,
             'group_classes': group_classes.strip(),
+            'legend_classes': legend_classes.strip(),
             'label_classes': label_classes.strip(),
             'help_classes': help_classes.strip(),
             'label': label,
@@ -172,7 +179,7 @@ class GOVUKForm(forms.Form):
         field_errors = OrderedDict(
             (field, errors[field.name])
             for field in self
-            if field.name in self.errors
+            if field.name in errors
         )
         context = {
             'error_summary_title': error_summary_title or self.error_summary_title,

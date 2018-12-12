@@ -1,7 +1,9 @@
-<div id="{{ widget.attrs.id }}-group" class="multiple-choice" {% if widget.conditionally_revealed %}data-target="{{ widget.conditionally_revealed.bound_field.auto_id }}-group"{% endif %}>
-  {% include 'django/forms/widgets/input.html' %}
-  <label id="{{ widget.attrs.id }}-label" for="{{ widget.attrs.id }}">{{ widget.label }}</label>
+<div id="{{ widget.attrs.id }}-group" class="{{ widget.option_wrapper_classes }}">
+    {% include 'django/forms/widgets/input.html' %}
+    <label id="{{ widget.attrs.id }}-label" for="{{ widget.attrs.id }}" class="{{ widget.option_label_classes }}">{{ widget.label }}</label>
 </div>
 {% if widget.conditionally_revealed %}
-  {{ widget.conditionally_revealed.html }}
+    <div id="{{ widget.conditionally_revealed.bound_field.auto_id }}-conditional" class="{{ widget.conditional_panel_classes }}">
+        {{ widget.conditionally_revealed.html }}
+    </div>
 {% endif %}

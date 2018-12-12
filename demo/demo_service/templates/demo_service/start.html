@@ -1,0 +1,27 @@
+{% extends 'demo_service/template.html' %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-xl">Form demos</h1>
+
+            <ul class="govuk-list govuk-list--bullet">
+                <li>
+                    <a href="{% url 'demo:simple' %}">Short form</a>
+                </li>
+                <li>
+                    <a href="{% url 'demo:long' %}">Long form</a>
+                </li>
+                <li>
+                    <a href="{% url 'demo:prefilled' %}">Long form, pre-filled</a>
+                </li>
+                <li>
+                    <a href="{% url 'demo:fieldsets' %}">Form with fieldsets</a>
+                </li>
+                <li>
+                    <a href="{% url 'demo:revealing' %}">Form with conditionally revealed</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}

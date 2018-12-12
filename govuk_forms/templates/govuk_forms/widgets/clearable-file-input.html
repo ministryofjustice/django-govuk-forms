@@ -1,0 +1,43 @@
+{% load i18n %}
+
+{% if widget.is_initial %}
+    <div class="govuk-radios govuk-radios--conditional" data-module="radios">
+        <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="{{ widget.checkbox_id }}--keep" name="{{ widget.checkbox_id }}__options" type="radio" value="" checked data-aria-controls="{{ widget.checkbox_id }}--keep__conditional" />
+            <label class="govuk-label govuk-radios__label" for="{{ widget.checkbox_id }}--keep">
+                {{ widget.initial_text }}
+            </label>
+        </div>
+        <div class="govuk-radios__conditional" id="{{ widget.checkbox_id }}--keep__conditional">
+            <div class="govuk-form-group">
+                <span class="govuk-body">
+                    {% trans 'View current file' %}:
+                    <a href="{{ widget.value.url }}" target="_blank" class="govuk-link">{{ widget.value }}</a>
+                </span>
+            </div>
+        </div>
+
+        {% if not widget.required %}
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="{{ widget.checkbox_id }}--remove" name="{{ widget.checkbox_id }}__options" type="radio" value="remove" />
+                <label class="govuk-label govuk-radios__label" for="{{ widget.checkbox_id }}--remove">
+                    {{ widget.clear_checkbox_label }}
+                </label>
+            </div>
+        {% endif %}
+
+        <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="{{ widget.checkbox_id }}--replace" name="{{ widget.checkbox_id }}__options" type="radio" value="" data-aria-controls="{{ widget.checkbox_id }}--replace__conditional" />
+            <label class="govuk-label govuk-radios__label" for="{{ widget.checkbox_id }}--replace">
+                {{ widget.input_text }}
+            </label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="{{ widget.checkbox_id }}--replace__conditional">
+            <div class="govuk-form-group">
+                <input type="{{ widget.type }}" name="{{ widget.name }}" {% include "django/forms/widgets/attrs.html" %} />
+            </div>
+        </div>
+    </div>
+{% else %}
+    <input type="{{ widget.type }}" name="{{ widget.name }}" {% include "django/forms/widgets/attrs.html" %} />
+{% endif %}

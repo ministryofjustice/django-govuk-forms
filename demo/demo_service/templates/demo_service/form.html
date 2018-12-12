@@ -1,0 +1,21 @@
+{% extends 'demo_service/template.html' %}
+
+{% block before_content %}
+    {{ block.super }}
+    <a href="{% url 'demo:start' %}" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-xl">Demo form</h1>
+
+            <form method="post" novalidate {% if form.is_multipart %}enctype="multipart/form-data"{% endif %}>
+                {{ form.error_summary }}
+                {% csrf_token %}
+                {{ form.as_div }}
+                {{ form.submit_button }}
+            </form>
+        </div>
+    </div>
+{% endblock %}

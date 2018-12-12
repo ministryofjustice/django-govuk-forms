@@ -31,9 +31,10 @@ setup(
     packages=find_packages(exclude=['demo', 'tests']),
     include_package_data=True,
     license='MIT',
-    description='Django app that creates forms based on Government Digital Services style guide',
+    description='Django app that creates forms based on '
+                'UK Government Digital Service’s style guide',
     long_description=README,
-    keywords='django govuk template forms elements frontend toolkit',
+    keywords='django forms govuk design system template elements frontend toolkit',
     classifiers=[
         'Development Status :: 4 - Beta',
         'Framework :: Django',

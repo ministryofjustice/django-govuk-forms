@@ -1,1 +1,1 @@
-django-govuk-template[scss]==0.8
+django-govuk-template[scss]>=0.9

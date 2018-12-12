@@ -3,8 +3,7 @@ from functools import partial
 from random import choice
 
 from django.conf.urls import url
-from django.urls import reverse_lazy
-from django.views.generic import FormView
+from django.views.generic import FormView as BaseFormView, TemplateView
 
 from demo_service.forms import SimpleForm, LongForm, FieldsetForm, RevealingForm
 
@@ -20,12 +19,52 @@ class FakeFile:
         return 'file.txt'
 
 
+class FormView(BaseFormView):
+    template_name = 'demo_service/form.html'
+    success_template_name = 'demo_service/data.html'
+
+    def form_valid(self, form):
+        if self.success_url:
+            return super().form_valid(form)
+
+        def presentable_value(f):
+            value = form.cleaned_data[f.name]
+            if hasattr(f.field, 'choices'):
+                cc = {}
+                for c in f.field.choices:
+                    if isinstance(c[1], (list, tuple)):
+                        for c in c[1]:
+                            cc[c[0]] = c[1]
+                    else:
+                        cc[c[0]] = c[1]
+                value = '\n'.join(
+                    str(cc.get(value, '???'))
+                    for value in value
+                )
+            return value
+
+        context = {
+            'form_data': [
+                (field.label, presentable_value(field))
+                for field in form
+                if field.name in form.cleaned_data
+            ],
+        }
+        return self.response_class(
+            request=self.request,
+            context=context,
+            template=[self.success_template_name],
+            using=self.template_engine,
+            content_type=self.content_type
+        )
+
+
 app_name = 'demo'
-view = partial(FormView.as_view, template_name='demo_service/demo.html')
 urlpatterns = [
-    url(r'^$', view(form_class=SimpleForm, success_url=reverse_lazy('demo:simple')), name='simple'),
-    url(r'^long/$', view(form_class=LongForm, success_url=reverse_lazy('demo:long')), name='long'),
-    url(r'^prefilled/$', view(form_class=LongForm, success_url=reverse_lazy('demo:prefilled'), initial={
+    url(r'^$', TemplateView.as_view(template_name='demo_service/start.html'), name='start'),
+    url(r'^simple/$', FormView.as_view(form_class=SimpleForm), name='simple'),
+    url(r'^long/$', FormView.as_view(form_class=LongForm), name='long'),
+    url(r'^prefilled/$', FormView.as_view(form_class=LongForm, initial={
         'text': 'sample', 'text_optional': 'not necessary', 'text_with_hint': 'hint helped',
         'email': 'example@gov.uk', 'url': 'gov.uk', 'password': '1234',
         'number': 123, 'textarea': '\nLorem ipsum\n',
@@ -41,8 +80,9 @@ urlpatterns = [
         'hidden': 'secret',
         'file': FakeFile(), 'clearable_file': FakeFile(),
     }), name='prefilled'),
-    url(r'^fieldsets/$', view(form_class=FieldsetForm, success_url=reverse_lazy('demo:fieldsets')), name='fieldsets'),
-    url(r'^revealing/$', view(form_class=RevealingForm, success_url=reverse_lazy('demo:revealing'), initial={
+    url(r'^fieldsets/$', FormView.as_view(form_class=FieldsetForm), name='fieldsets'),
+    url(r'^revealing/$', FormView.as_view(form_class=RevealingForm, initial={
+        'hidden_at_first': 'initial value',
         'choices': 'b',
     }), name='revealing'),
 ]

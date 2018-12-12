@@ -1,0 +1,48 @@
+@import "govuk-frontend/settings/all";
+@import "govuk-frontend/tools/all";
+@import "govuk-frontend/helpers/all";
+
+// TODO: rewrite
+@include govuk-exports("govuk_forms/date") {
+    .govuk-date-input_________________ {
+        // Django split date-time widget
+        .govuk-form-group--date {
+            width: 120px;
+        }
+
+        .govuk-form-group--time {
+            width: 100px;
+        }
+
+        @include govuk-media-query($until: tablet) {
+            .govuk-form-group--date, .govuk-form-group--time {
+                width: 40%;
+            }
+        }
+
+        // Django select date widget
+        .govuk-form-group--year-select {
+            width: 100px;
+        }
+
+        .govuk-form-group--month-select {
+            width: 150px;
+        }
+
+        .govuk-form-group--day-select {
+            width: 100px;
+        }
+
+        .govuk-form-group--year-select, .govuk-form-group--month-select, .govuk-form-group--day-select {
+            .govuk-input {
+                width: 100%;
+            }
+
+            @include govuk-media-query($until: tablet) {
+                width: 50%;
+                margin-bottom: $govuk-gutter-half;
+                clear: left;
+            }
+        }
+    }
+}

@@ -1,0 +1,44 @@
+@import "govuk-frontend/settings/all";
+@import "govuk-frontend/tools/all";
+@import "govuk-frontend/helpers/all";
+
+@include govuk-exports("govuk_forms/checkbox") {
+    .govuk-checkboxes {
+        .govuk-fieldset__legend {
+            padding-top: govuk-spacing(2);
+        }
+
+        .govuk-checkboxes__conditional .govuk-fieldset__legend {
+            padding-top: 0;
+        }
+    }
+
+    .govuk-checkboxes--inline {
+        @include govuk-media-query($from: tablet) {
+            @include govuk-clearfix;
+
+            .govuk-checkboxes__item {
+                margin-right: govuk-spacing(4);
+                float: left;
+                clear: none;
+            }
+        }
+
+        &.govuk-checkboxes--conditional {
+            .govuk-checkboxes__item {
+                margin-right: 0;
+                float: none;
+            }
+        }
+    }
+
+    .govuk-checkboxes__divider {
+        $govuk-checkboxes-size: govuk-spacing(7) !default;
+        $govuk-divider-size: $govuk-checkboxes-size !default;
+        @include govuk-font($size: 19);
+        @include govuk-text-colour;
+        width: $govuk-divider-size;
+        margin-bottom: govuk-spacing(2);
+        text-align: center;
+    }
+}

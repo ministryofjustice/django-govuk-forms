@@ -1,0 +1,16 @@
+{% extends 'demo_service/template.html' %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-xl">Demo form</h1>
+
+            {% for label, value in form_data %}
+                <div class="govuk-form-group">
+                    <span class="govuk-label">{{ label }}</span>
+                    <pre class="govuk-!-font-size-19">{{ value }}</pre>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,7 @@
+{% extends 'govuk_template/template.html' %}
+{% load static %}
+
+{% block head %}
+    {{ block.super }}
+    <link href="{% static 'demo_service/demo.css' %}" rel="stylesheet"/>
+{% endblock %}
